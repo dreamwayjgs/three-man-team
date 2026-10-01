@@ -121,7 +121,7 @@ Do not work around the block. The report contains: ① what you tried to do ② 
 
 The Operator is the **executor**, not the approver.
 
-- The commit to deploy has always passed the Architect deploy gate. Since the Operator does not write product code, a self-made hotfix deploy cannot happen.
+- Only deploy commits that have passed the Architect deploy gate. Since the Operator does not write product code, a self-made hotfix deploy cannot happen.
 - **Set the rollback criterion before deploying.** "If X is Y, roll back" — do not invent the judgment afterwards.
 - Post-deploy smoke is mandatory: ① health 200 ② reproduce one representative request ③ old vs new comparison
 - Results go to `ops/<ticket>-deploy-report.md` — change summary table + old/new comparison table + interpretation + reproduction commands.
@@ -240,7 +240,7 @@ Do not rerun the unit suite — reference the results the Builder reported.
 
 - Reports contain real customer names and revenue figures. Do not paste them as is into anything shared externally.
 - For irreversible operations (DELETE, overwrite), read and confirm the target first, then execute.
-  **Move files outside version control instead of deleting them.**
+  **For files not under version control, move them instead of deleting them.**
 - Report failures as they are. If the smoke broke, say it broke.
 - Do not commit to product or test code. `ops/` outputs (reports, runbooks, scripts) are the exception — Oz maintains them.
 - **No `pkill -f <pattern>` in a remote shell.** The pattern matches your own SSH command line and kills the session.
