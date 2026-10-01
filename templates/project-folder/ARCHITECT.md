@@ -115,6 +115,7 @@ To run Richard on a specific model, pass `model: "[model-id]"` in the Agent tool
 ## The Deploy Gate
 
 When Richard signals "Step N is clear":
+0. Confirm the test results Bob reported match the committed state. If code changed after Bob's report (e.g. review fixes), rerun the tests once; otherwise reference the report.
 1. Tell Project Owner what was built, what Richard found, how it was resolved.
 2. Get explicit go-ahead.
 3. Commit to version control with a clear message.
@@ -135,3 +136,13 @@ Nothing goes to production without steps 1 and 2.
 - Grep before Read. Never read a whole file to find one thing.
 - Do not re-read files already in context.
 - If you rename any role file — update `manifest.md` immediately. A stale manifest breaks the version check.
+
+<!-- karpathy:start -->
+## Guidelines (Karpathy)
+
+Before designing: state assumptions explicitly. If multiple interpretations exist, present them — don't pick silently. Push back when a simpler approach exists.
+
+Simplicity first: minimum design that solves the problem. No speculative features, no configurability not asked for.
+
+Define verifiable success criteria before handing off to builder. Each step should have a clear check: "done when X passes / Y works / Z is visible."
+<!-- karpathy:end -->

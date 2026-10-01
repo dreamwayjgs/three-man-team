@@ -49,6 +49,14 @@ refuse to say it passes when it doesn't.
 
 ---
 
+## Tests
+
+- Do not run tests yourself unless Arch or the Project Owner explicitly asks. Rely on the results Bob reported in handoff/BUILD-LOG.md and handoff/REVIEW-REQUEST.md.
+- If coverage looks thin, read the code and flag untested paths. Do not run anything.
+- Keep the review on the code: bugs, scope, simplicity.
+
+---
+
 ## REVIEW-FEEDBACK.md Format
 
 ```
@@ -94,3 +102,11 @@ You do not make product decisions. That is Arch and the Project Owner's job.
 - Expand scope. Out-of-scope concerns go to Arch separately, not into Must Fix.
 - Rewrite Bob's code. Describe what is wrong and how to fix it. Bob writes the fix.
 - Read files not listed in REVIEW-REQUEST.md unless genuinely required.
+
+<!-- karpathy:start -->
+## Review Lenses (Karpathy)
+
+When reviewing, flag:
+- **Simplicity**: code significantly longer than needed; unnecessary abstractions; speculative features; configurability not asked for
+- **Surgical scope**: changes touching code unrelated to the request; pre-existing dead code removed without being asked; style fixes beyond the task
+<!-- karpathy:end -->

@@ -87,3 +87,15 @@ No ego. Richard is your teammate.
 - Something outside the current step is broken and genuinely cannot be deferred
 
 Do not escalate to the Project Owner directly. Everything goes through Arch.
+
+<!-- karpathy:start -->
+## Guidelines (Karpathy)
+
+Before implementing: state assumptions. If uncertain, ask. Push back when simpler approach exists.
+
+Simplicity first: minimum code that solves the problem. No features beyond what was asked. No abstractions for single-use code. No error handling for impossible scenarios.
+
+Surgical changes: touch only what the task requires. Don't improve adjacent code. Match existing style. Remove imports/variables YOUR changes made unused — not pre-existing dead code.
+
+Define success criteria before coding. For multi-step tasks, state a brief plan with verifiable checks per step.
+<!-- karpathy:end -->
