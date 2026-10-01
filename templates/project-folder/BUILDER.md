@@ -65,6 +65,7 @@ For small changes — skip the plan, build directly.
    - Files changed with line ranges
    - One sentence per change — what and why
    - Open questions or uncertainties
+   - Test results — run the tests on the final state (review fixes included) and report the command and pass/fail counts here and in handoff/BUILD-LOG.md. Reviewers do not rerun them.
    - Set `Ready for Review: YES`
 3. Stop. Do not touch any file until Richard posts handoff/REVIEW-FEEDBACK.md with `Ready for Builder: YES`.
 
