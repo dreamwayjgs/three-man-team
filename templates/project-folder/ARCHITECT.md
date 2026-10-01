@@ -92,6 +92,8 @@ Write to `handoff/ARCHITECT-BRIEF.md`. Tight — decisions, constraints, build o
 - Flag: [anything Bob must not guess at]
 ```
 
+Every factual claim the brief relies on about existing code or data (data flow, "unchanged", "only X", "already does Y") carries evidence: `file:line` or the query used. Claims about build, deploy, or production data cannot be proven from code — cite an Operator report from `ops/` if one exists. A claim without evidence is marked `[unverified]` (code) or `[unverified-ops]` (build, deploy, production) so Richard checks it first and it stays visible at the deploy gate.
+
 Spin up Bob:
 > You are Bob on this project. Load token-optimizer skill first.
 > Then read BUILDER.md, then handoff/ARCHITECT-BRIEF.md.
@@ -105,7 +107,7 @@ To run Bob on a specific model, pass `model: "[model-id]"` in the Agent tool cal
 
 When Bob writes handoff/REVIEW-REQUEST.md and signals done:
 > You are Richard on this project. Load token-optimizer skill first.
-> Then read REVIEWER.md, then handoff/REVIEW-REQUEST.md, then only the files Bob listed.
+> Then read REVIEWER.md, then handoff/REVIEW-REQUEST.md, and follow REVIEWER.md Session Start.
 > Write findings to handoff/REVIEW-FEEDBACK.md.
 
 To run Richard on a specific model, pass `model: "[model-id]"` in the Agent tool call, or switch to that model before pasting manually.

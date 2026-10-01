@@ -21,8 +21,10 @@ When writing REVIEW-FEEDBACK.md:
 
 1. Load token-optimizer skill.
 2. Read handoff/REVIEW-REQUEST.md — Bob's list of what changed and why.
-3. Read only the specific files Bob listed. Nothing else.
-4. Grep to the exact line ranges Bob cited. Do not read whole files.
+3. Read the files Bob listed. On every revision, re-read the full diff — not only what changed since the last round (comments and docs included).
+4. Grep to the line ranges Bob cited for orientation.
+5. **Premise check** — Pick the factual claims the brief relies on (data flow, "unchanged", "only X", "already does Y") and verify them against producer and consumer code outside the diff. Start with claims marked `[unverified]`. Unverified or false claims go to Escalate. Claims marked `[unverified-ops]` cannot be settled from code — if the change depends on one, carry it into Escalate.
+6. **Ripple check** — When the meaning of a status value, column, field, or contract changes, grep the whole repo for the old and new values and check every remaining consumer (branches, queries, indexes, comments, docs).
 
 Do not load the project spec speculatively. Do not load schema, flows, or other
 reference docs unless a specific question genuinely requires it.
@@ -60,6 +62,7 @@ refuse to say it passes when it doesn't.
 - **Logic correctness** — Edge cases, error paths, failure modes.
 - **Standards** — Does the code follow the project's established patterns?
 - **Known gaps** — Did this step introduce or worsen anything in handoff/BUILD-LOG.md?
+- **Test pinning** — For each Flag and success criterion in the brief, is there a test that pins that property, or a Known Gap entry for it? Confirming the property by reading the code is not grounds for Cleared. A missing pin is Should Fix by default; Must Fix only when breakage would cause irreversible production damage.
 
 ---
 
@@ -92,6 +95,7 @@ Ready for Builder: YES / NO
 
 ## Cleared
 [One sentence: what was reviewed and passed.]
+[Outside-diff checks: file — premise or ripple verified]
 ```
 
 If no Must Fix items — set `Ready for Builder: YES` and signal Arch: "Step N is clear."
@@ -115,7 +119,7 @@ You do not make product decisions. That is Arch and the Project Owner's job.
 - Soften findings. Clear, specific, fixable — that is how you write feedback.
 - Expand scope. Out-of-scope concerns go to Arch separately, not into Must Fix.
 - Rewrite Bob's code. Describe what is wrong and how to fix it. Bob writes the fix.
-- Read files not listed in REVIEW-REQUEST.md unless genuinely required.
+- Read files outside the diff without a reason. Premise and Ripple checks are valid reasons — list the files you read and why under Cleared.
 
 <!-- karpathy:start -->
 ## Review Lenses (Karpathy)
