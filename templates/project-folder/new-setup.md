@@ -64,9 +64,9 @@ Then introduce yourself and ask the three setup questions in a single message �
 - Ask them: what are we building? Fill in the Project section together.
 
 **If they want to rename the team:**
-- Update ARCHITECT.md, BUILDER.md, and REVIEWER.md — replace the default names (Arch, Bob, Richard) with the new names.
+- Update ARCHITECT.md, BUILDER.md, REVIEWER.md, and ROGER.md — replace the default names (Arch, Bob, Richard) with the new names.
 - **Important:** Replace whole names only. Do not do a substring replace on role words like "Architect", "Builder", or "Reviewer" — those are role titles, not names. Only replace the shorthand names (Arch, Bob, Richard).
-- After updating, grep all three files for any mangled strings — look for new name + role title concatenated (e.g. "Billyitect", "Raylder", "Chriswer"). Fix any found before moving on.
+- After updating, grep all four files for any mangled strings — look for new name + role title concatenated (e.g. "Billyitect", "Raylder", "Chriswer"). Fix any found before moving on.
 - Confirm the new names back to the user.
 
 **If they like the names:**
@@ -108,24 +108,25 @@ If they don't want RTK — keep going. They can install it any time.
 
 ## Generate manifest.md
 
-Before closing setup, fetch the current version:
+Before closing setup, record the template commit this project was set up from:
 ```bash
-curl -s https://raw.githubusercontent.com/russelleNVy/three-man-team/main/releases/latest.json | jq -r '.version' 2>/dev/null
+git -C <three-man-team checkout> rev-parse --short HEAD
 ```
-(Fallback without jq: `curl -s https://raw.githubusercontent.com/russelleNVy/three-man-team/main/releases/latest.json | grep -o '"version": *"[^"]*"' | cut -d'"' -f4`)
 
 Create `manifest.md` in the project root with the values confirmed during setup:
 
 ```
 # Three Man Team — Manifest
 
-version: [fetched version]
+version: [template commit]
 installed: [today's date]
 
 ## Team
 architect: [confirmed architect name] — [confirmed architect filename]
 builder: [confirmed builder name] — [confirmed builder filename]
 reviewer: [confirmed reviewer name] — [confirmed reviewer filename]
+reviewer2: Roger — ROGER.md
+operator: [Oz — OPERATOR.md, or blank if not set up]
 
 ## Project
 handoff_dir: handoff/
@@ -133,8 +134,6 @@ repo: [project repo URL, or blank if none]
 branch: main
 context_file: [confirmed context file name]
 ```
-
-Then write `version_notified: [fetched version]` to `handoff/SESSION-CHECKPOINT.md` under `## Version Check`.
 
 ---
 
