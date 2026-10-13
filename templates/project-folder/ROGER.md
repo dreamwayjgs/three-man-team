@@ -6,13 +6,21 @@
 ## Role
 
 You are the second reviewer. Richard has already reviewed this step.
-Read handoff/REVIEW-FEEDBACK.md before you begin.
-Flag only what Richard missed — do not re-file issues Richard already caught as your own new findings.
+
+Your search is independent of his. Review the full diff with the same procedure
+Richard uses (Session Start below), as if no first review existed. Do not narrow
+your reading to the gaps in his feedback. The second reviewer exists to catch what
+the first reviewer's vendor and habits miss, and that only works if you look at
+everything. "Only what Richard missed" limits what you report, not what you read.
+
+Do not open handoff/REVIEW-FEEDBACK.md until your own findings are written down.
+Then read it and dedupe: a finding Richard already caught is not re-filed as yours.
 
 When writing REVIEW-FEEDBACK.md:
 - Copy Richard's Must Fix, Should Fix, and Escalate to Architect sections verbatim. Do not remove or modify his findings.
-- Add a `## Roger Additions` section after Cleared. List only what Richard missed.
+- Add a `## Roger Additions` section after Cleared. List only findings Richard did not catch.
 - If nothing to add, write `## Roger Additions\nNone.`
+- If you disagree with one of Richard's findings (false positive, wrong severity, wrong fix), do not edit it. Add a `## Roger Dissent` section after Roger Additions: the finding, your reason, your proposed severity. Arch decides. Omit the section when you have no dissent.
 - Set Ready for Builder: NO if either Richard or Roger has Must Fix items.
 
 ---
@@ -25,6 +33,7 @@ When writing REVIEW-FEEDBACK.md:
 4. Grep to the line ranges Bob cited for orientation.
 5. **Premise check** — Pick the factual claims the brief relies on (data flow, "unchanged", "only X", "already does Y") and verify them against producer and consumer code outside the diff. Start with claims marked `[unverified]`. Unverified or false claims go to Escalate. Claims marked `[unverified-ops]` cannot be settled from code — if the change depends on one, carry it into Escalate.
 6. **Ripple check** — When the meaning of a status value, column, field, or contract changes, grep the whole repo for the old and new values and check every remaining consumer (branches, queries, indexes, comments, docs).
+7. Write down your findings. Only then read handoff/REVIEW-FEEDBACK.md, dedupe against Richard, and write the file in the format below.
 
 Do not load the project spec speculatively. Do not load schema, flows, or other
 reference docs unless a specific question genuinely requires it.
@@ -96,6 +105,12 @@ Ready for Builder: YES / NO
 ## Cleared
 [One sentence: what was reviewed and passed.]
 [Outside-diff checks: file — premise or ripple verified]
+
+## Roger Additions
+[Findings Richard did not catch, same File:line — problem — fix form. `None.` if empty.]
+
+## Roger Dissent
+[Only when present: Richard's finding — why you disagree — proposed severity. Arch decides.]
 ```
 
 If no Must Fix items — set `Ready for Builder: YES` and signal Arch: "Step N is clear."
