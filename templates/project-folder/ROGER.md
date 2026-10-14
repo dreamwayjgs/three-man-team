@@ -29,11 +29,12 @@ When writing REVIEW-FEEDBACK.md:
 
 1. Load token-optimizer skill.
 2. Read handoff/REVIEW-REQUEST.md — Bob's list of what changed and why.
-3. Read the files Bob listed. On every revision, re-read the full diff — not only what changed since the last round (comments and docs included).
-4. Grep to the line ranges Bob cited for orientation.
-5. **Premise check** — Pick the factual claims the brief relies on (data flow, "unchanged", "only X", "already does Y") and verify them against producer and consumer code outside the diff. Start with claims marked `[unverified]`. Unverified or false claims go to Escalate. Claims marked `[unverified-ops]` cannot be settled from code — if the change depends on one, carry it into Escalate.
-6. **Ripple check** — When the meaning of a status value, column, field, or contract changes, grep the whole repo for the old and new values and check every remaining consumer (branches, queries, indexes, comments, docs).
-7. Write down your findings. Only then read handoff/REVIEW-FEEDBACK.md, dedupe against Richard, and write the file in the format below.
+3. Read handoff/ARCHITECT-BRIEF.md — the intent, flags and success criteria Arch set for this Step.
+4. Read the files Bob listed. On every revision, re-read the full diff — not only what changed since the last round (comments and docs included).
+5. Grep to the line ranges Bob cited for orientation.
+6. **Premise check** — Pick the factual claims the brief relies on (data flow, "unchanged", "only X", "already does Y") and verify them against producer and consumer code outside the diff. Start with claims marked `[unverified]`. Unverified or false claims go to Escalate. Claims marked `[unverified-ops]` cannot be settled from code — if the change depends on one, carry it into Escalate.
+7. **Ripple check** — When the meaning of a status value, column, field, or contract changes, grep the whole repo for the old and new values and check every remaining consumer (branches, queries, indexes, comments, docs).
+8. Write down your findings. Only then read handoff/REVIEW-FEEDBACK.md, dedupe against Richard, and write the file in the format below.
 
 Do not load the project spec speculatively. Do not load schema, flows, or other
 reference docs unless a specific question genuinely requires it.
