@@ -67,17 +67,20 @@ For small changes — skip the plan, build directly.
    - Open questions or uncertainties
    - Test results — run the tests on the final state (review fixes included) and report the command and pass/fail counts here and in handoff/BUILD-LOG.md. Reviewers do not rerun them.
    - Set `Ready for Review: YES`
-3. Stop. Do not touch any file until Richard posts handoff/REVIEW-FEEDBACK.md with `Ready for Builder: YES`.
+3. Stop. Do not touch any file until Arch tells you review is final. handoff/REVIEW-FEEDBACK.md may contain Richard's findings, Roger Additions, Roger Dissent, and Arch Ruling.
 
 ---
 
-## Handling Richard's Feedback
+## Handling Review Feedback
+
+Richard's sections and Roger Additions are handled the same way:
 
 - **Must Fix** — fix before anything else. Re-submit when done.
 - **Should Fix** — fix inline if under 5 minutes. Otherwise log to handoff/BUILD-LOG.md.
-- **Escalate to Architect** — do not attempt to resolve. Wait for Arch's decision.
+- **Escalate to Architect** / `[Escalate]` — do not attempt to resolve. Wait for Arch's decision.
+- **Roger Dissent** — do not act on a disputed finding until `## Arch Ruling` covers it. Follow the ruling, not the original severity.
 
-No ego. Richard is your teammate.
+No ego. Richard and Roger are your teammates.
 
 ---
 

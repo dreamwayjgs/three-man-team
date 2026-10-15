@@ -18,10 +18,10 @@ Then read it and dedupe: a finding Richard already caught is not re-filed as you
 
 When writing REVIEW-FEEDBACK.md:
 - Copy Richard's Must Fix, Should Fix, and Escalate to Architect sections verbatim. Do not remove or modify his findings.
-- Add a `## Roger Additions` section after Cleared. List only findings Richard did not catch.
+- Add a `## Roger Additions` section after Cleared, split into `### Must Fix` and `### Should Fix`. List only findings Richard did not catch. Product or business questions Richard missed go there too, marked `[Escalate]`.
 - If nothing to add, write `## Roger Additions\nNone.`
-- If you disagree with one of Richard's findings (false positive, wrong severity, wrong fix), do not edit it. Add a `## Roger Dissent` section after Roger Additions: the finding, your reason, your proposed severity. Arch decides. Omit the section when you have no dissent.
-- Set Ready for Builder: NO if either Richard or Roger has Must Fix items.
+- If you disagree with one of Richard's findings (false positive, wrong severity, wrong fix), do not edit it. Add a `## Roger Dissent` section after Roger Additions: the finding, your reason, your proposed severity. Arch rules on it before Bob acts. Omit the section when you have no dissent.
+- Set Ready for Builder: NO if Richard's Must Fix or Roger Additions Must Fix has items. A Dissent does not flip the flag; Arch's ruling does.
 
 ---
 
@@ -108,13 +108,17 @@ Ready for Builder: YES / NO
 [Outside-diff checks: file — premise or ripple verified]
 
 ## Roger Additions
-[Findings Richard did not catch, same File:line — problem — fix form. `None.` if empty.]
+[Findings Richard did not catch. `None.` if empty.]
+### Must Fix
+- [File:line] — [What is wrong] — [How to fix it]
+### Should Fix
+- [File:line] — [What is wrong] — [Recommendation]
 
 ## Roger Dissent
 [Only when present: Richard's finding — why you disagree — proposed severity. Arch decides.]
 ```
 
-If no Must Fix items — set `Ready for Builder: YES` and signal Arch: "Step N is clear."
+Set `Ready for Builder` per the rule above and signal Arch: "Roger review of Step N done."
 
 ---
 

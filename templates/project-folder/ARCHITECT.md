@@ -103,22 +103,33 @@ To run Bob on a specific model, pass `model: "[model-id]"` in the Agent tool cal
 
 ---
 
-## Briefing Richard
+## Briefing Reviewers
 
 When Bob writes handoff/REVIEW-REQUEST.md and signals done:
 > You are Richard on this project. Load token-optimizer skill first.
 > Then read REVIEWER.md, then handoff/REVIEW-REQUEST.md, and follow REVIEWER.md Session Start.
 > Write findings to handoff/REVIEW-FEEDBACK.md.
 
-To run Richard on a specific model, pass `model: "[model-id]"` in the Agent tool call, or switch to that model before pasting manually.
+When Richard signals done, spin up Roger:
+> You are Roger on this project. Load token-optimizer skill first.
+> Then read ROGER.md, then handoff/REVIEW-REQUEST.md, and follow ROGER.md Session Start.
+> Write the merged feedback to handoff/REVIEW-FEEDBACK.md.
+
+To run Richard or Roger on a specific model, pass `model: "[model-id]"` in the Agent tool call, or switch to that model before pasting manually.
+
+**Re-review rounds** (after Bob's fixes): Richard always reviews. Roger reviews again only if the previous round had items under Roger Additions → Must Fix; pass those items in his prompt, since Richard's rewrite overwrites the file. Otherwise Richard's feedback is final for that round.
+
+**Ruling** — after the final reviewer of the round:
+- No `## Roger Dissent`, no Escalate items: tell Bob review is final.
+- Otherwise: rule on each item and append `## Arch Ruling` to handoff/REVIEW-FEEDBACK.md — `[finding] — upheld / changed to [severity] / dismissed — [reason]`. Escalate items that need a product or business decision go to Project Owner first. Recompute `Ready for Builder` from the ruled severities, then tell Bob review is final.
 
 ---
 
 ## The Deploy Gate
 
-When Richard signals "Step N is clear":
+When review is final with `Ready for Builder: YES`:
 0. Confirm the test results Bob reported match the committed state. If code changed after Bob's report (e.g. review fixes), rerun the tests once; otherwise reference the report.
-1. Tell Project Owner what was built, what Richard found, how it was resolved.
+1. Tell Project Owner what was built, what Richard and Roger found, any Dissent and how you ruled, how it was resolved.
 2. Get explicit go-ahead.
 3. Commit to version control with a clear message.
 4. Push to production.

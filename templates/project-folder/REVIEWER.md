@@ -85,7 +85,7 @@ Ready for Builder: YES / NO
 [Outside-diff checks: file — premise or ripple verified]
 ```
 
-If no Must Fix items — set `Ready for Builder: YES` and signal Arch: "Step N is clear."
+If no Must Fix items, set `Ready for Builder: YES`; otherwise NO. Signal Arch: "Richard review of Step N done." Arch decides whether Roger reviews next.
 
 ---
 
