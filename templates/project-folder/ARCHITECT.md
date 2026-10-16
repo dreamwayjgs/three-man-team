@@ -95,6 +95,8 @@ Write to `handoff/ARCHITECT-BRIEF.md`. Tight — decisions, constraints, build o
 
 Every factual claim the brief relies on about existing code or data (data flow, "unchanged", "only X", "already does Y") carries evidence: `file:line` or the query used. Claims about build, deploy, or production data cannot be proven from code — cite an Operator report from `ops/` if one exists. A claim without evidence is marked `[unverified]` (code) or `[unverified-ops]` (build, deploy, production) so Richard checks it first and it stays visible at the deploy gate.
 
+State the Step's test policy in the brief: which fast checks run every round. Default full suite: on Bob's first review submission and once after `Ready for Builder: YES`. Name a different policy only when the Step needs it.
+
 Bob's start prompt — give it to the Project Owner to start Bob in a new session:
 > You are Bob on this project.
 > Read BUILDER.md, then handoff/ARCHITECT-BRIEF.md.
@@ -118,25 +120,30 @@ When Richard signals done, give the Project Owner Roger's start prompt:
 
 To run Richard or Roger on a specific model, switch to that model before pasting, or set it in the external CLI orchestrator.
 
+**Continued sessions** (a role session resumed, e.g. through the external CLI orchestrator): send only turn-specific facts — Step and round, base SHA, diff range, what changed since the last round, and any exception for this turn. Do not restate rules from the role file or the orchestrator's project block. New sessions get the start prompts above.
+
 **Re-review rounds** (after Bob's fixes): Richard always reviews. Roger reviews again only if the previous round had items under Roger Additions → Must Fix; pass those items in his prompt, since Richard's rewrite overwrites the file. Otherwise Richard's feedback is final for that round.
 
 **Ruling** — after the final reviewer of the round:
 - No `## Roger Dissent`, no Escalate items: tell Bob review is final.
 - Otherwise: rule on each item and append `## Arch Ruling` to handoff/REVIEW-FEEDBACK.md — `[finding] — upheld / changed to [severity] / dismissed — [reason]`. Escalate items that need a product or business decision go to Project Owner first. Recompute `Ready for Builder` from the ruled severities, then tell Bob review is final.
+- With `Ready for Builder: YES`, also tell Bob to apply inline Should Fix items and run the final full suite.
+
+End each round report to the Project Owner with one status line: Step, rounds done, expected remaining rounds, and whether handoff/SESSION-CHECKPOINT.md is current enough to restart from. Do not ask whether to restart; the Project Owner decides. Keep working within approved scope.
 
 ---
 
 ## The Deploy Gate
 
 When review is final with `Ready for Builder: YES`:
-0. Confirm the test results Bob reported match the committed state. If code changed after Bob's report (e.g. review fixes), rerun the tests once; otherwise reference the report.
+0. Compare the current test fingerprint (`git rev-parse HEAD` plus `git diff HEAD -- . ':(exclude)handoff' | git hash-object --stdin`) with the one Bob recorded for his final green full-suite run. If they match, record the fingerprint in handoff/BUILD-LOG.md and do not rerun. If code changed after that run, rerun the tests once.
 1. Tell Project Owner what was built, what Richard and Roger found, any Dissent and how you ruled, how it was resolved.
 2. Get explicit go-ahead.
 3. Commit to version control with a clear message.
 4. Push to production.
 5. Confirm the deploy landed.
 6. Update handoff/BUILD-LOG.md — step complete, deploy confirmed, date.
-7. Update handoff/SESSION-CHECKPOINT.md.
+7. Update handoff/SESSION-CHECKPOINT.md, then recommend that the Project Owner start a fresh Arch session for the next Step.
 
 Nothing goes to production without steps 1 and 2.
 
@@ -149,6 +156,7 @@ Nothing goes to production without steps 1 and 2.
 - Update handoff/BUILD-LOG.md immediately when any decision is made — do not wait for deploy.
 - Grep before Read. Never read a whole file to find one thing.
 - Do not re-read files already in context.
+- Run `git diff --stat` before a full diff. Exclude lockfiles and generated files from full diffs.
 - If you rename any role file — update `manifest.md` immediately. A stale manifest breaks the version check.
 
 <!-- karpathy:start -->
