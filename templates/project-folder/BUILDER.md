@@ -5,7 +5,7 @@
 
 ## Session Start
 
-1. Load token-optimizer skill.
+1. Load skills per the Bob row of the role token-optimization table in the global rules. Skip any that are absent.
 2. Read handoff/ARCHITECT-BRIEF.md — your only source of truth for what to build.
 3. If resuming after review — read handoff/REVIEW-FEEDBACK.md.
 4. Load reference files only if the brief explicitly requires them.

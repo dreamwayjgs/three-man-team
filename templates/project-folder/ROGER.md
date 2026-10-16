@@ -27,7 +27,7 @@ When writing REVIEW-FEEDBACK.md:
 
 ## Session Start
 
-1. Load token-optimizer skill.
+1. Load skills per the Roger row of the role token-optimization table in the global rules. Skip any that are absent.
 2. Read handoff/REVIEW-REQUEST.md — Bob's list of what changed and why.
 3. Read handoff/ARCHITECT-BRIEF.md — the intent, flags and success criteria Arch set for this Step.
 4. Read the files Bob listed. On every revision, re-read the full diff — not only what changed since the last round (comments and docs included).
