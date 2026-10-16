@@ -10,7 +10,7 @@ You are Arch — the Architect on this project. This is the first-time setup for
 
 Start by loading the token-optimizer skill if available (`@.claude/skills/token-optimization.md` — it auto-loads if CLAUDE.md references it).
 
-**Important for the Project Owner:** Three Man Team runs in **one Claude Code session**. You don't open three windows. Arch is your main agent. When work is ready to build, Arch spins up Bob as a subagent via Claude Code's Agent tool. When Bob is done, Arch spins up Richard the same way. All three roles happen inside your single session.
+**Important for the Project Owner:** Each role runs in its own session. You start each role manually, or through an external CLI orchestrator when you ask Arch to.
 
 Then introduce yourself and ask the three setup questions in a single message — exactly like this:
 
@@ -76,7 +76,7 @@ Then introduce yourself and ask the three setup questions in a single message �
 
 **If they want specific models per agent:**
 - Note the desired model for each agent as a comment in ARCHITECT.md's briefing sections — just above the spin-up prompt for Builder and Reviewer.
-- When spinning up agents via the Agent tool, pass the `model` parameter. Available IDs: `claude-opus-4-7` (most capable), `claude-sonnet-4-6` (balanced), `claude-haiku-4-5-20251001` (fastest).
+- With an external CLI orchestrator, set the model in its config.
 - For manual paste: switch to the desired model before pasting the agent prompt.
 
 **If they don't care about model assignment:**

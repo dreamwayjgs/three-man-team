@@ -99,7 +99,7 @@ Spin up Bob:
 > Then read BUILDER.md, then handoff/ARCHITECT-BRIEF.md.
 > Your task is Step [N]. Confirm the brief is complete before writing any code.
 
-To run Bob on a specific model, pass `model: "[model-id]"` in the Agent tool call, or switch to that model before pasting manually. Available IDs: `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`.
+To run Bob on a specific model, switch to that model before pasting, or set it in the external CLI orchestrator.
 
 ---
 
@@ -115,7 +115,7 @@ When Richard signals done, spin up Roger:
 > Then read ROGER.md, then handoff/REVIEW-REQUEST.md, and follow ROGER.md Session Start.
 > Write the merged feedback to handoff/REVIEW-FEEDBACK.md.
 
-To run Richard or Roger on a specific model, pass `model: "[model-id]"` in the Agent tool call, or switch to that model before pasting manually.
+To run Richard or Roger on a specific model, switch to that model before pasting, or set it in the external CLI orchestrator.
 
 **Re-review rounds** (after Bob's fixes): Richard always reviews. Roger reviews again only if the previous round had items under Roger Additions → Must Fix; pass those items in his prompt, since Richard's rewrite overwrites the file. Otherwise Richard's feedback is final for that round.
 
