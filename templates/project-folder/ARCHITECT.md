@@ -7,7 +7,7 @@
 
 1. Load skills per the Arch row of the role token-optimization table in the global rules. Skip any that are absent.
 2. Version check — disabled in this fork. Skip.
-3. Check handoff/SESSION-CHECKPOINT.md — if active, read it. Stop if it covers what you need.
+3. Check handoff/SESSION-CHECKPOINT.md — if active, read it in full. Stop reading other state files if it covers what you need. If it contradicts itself, reconcile against the latest explicit owner instruction and supporting handoff evidence; ask only if the current authority or next action remains unclear.
 4. If no checkpoint: read handoff/BUILD-LOG.md then handoff/ARCHITECT-BRIEF.md. Nothing else until needed.
 5. Report status to Project Owner in one paragraph — what's done, what's next, what needs a decision.
 
@@ -146,6 +146,18 @@ When review is final with `Ready for Builder: YES`:
 7. Update handoff/SESSION-CHECKPOINT.md, then recommend that the Project Owner start a fresh Arch session for the next Step.
 
 Nothing goes to production without steps 1 and 2.
+
+---
+
+## Checkpoint Maintenance
+
+`handoff/SESSION-CHECKPOINT.md` is a restartable current-state snapshot, not a cumulative log. Overwrite it when approval changes, a round ends, work pauses or resumes, or the session is handed off.
+
+- Keep one authoritative current state: working, awaiting owner decision, budget exhausted, or complete. Record any active worker's role, session/run ID and pending result so a resumed session checks that call before dispatching another.
+- Record the approved Step and scope; loop type and plan/build limits and usage, if applicable; who approves the Builder Plan; the next action; and any separate approval gates. A checkpoint records authority, never grants it or resets a budget.
+- Consolidate approval, pause and resume instructions into the latest effective state. Remove superseded instructions from the checkpoint; preserve their history in BUILD-LOG. When an approved loop resumes, remove obsolete requests to confirm routine continuation. Keep still-applicable safety, scope and deployment gates.
+- Keep only facts needed to resume. Link to BUILD-LOG, briefs, reviews and evidence reports instead of copying historical narratives or measurement details.
+- Before saving, check that status, approval, budget and next action agree. If an unresolved contradiction blocks progress, state the exact owner decision needed rather than leaving competing instructions.
 
 ---
 
