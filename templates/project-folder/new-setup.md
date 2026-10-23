@@ -100,6 +100,14 @@ If they don't want RTK — keep going. They can install it any time.
 
 ---
 
+**Repo visibility and ignores:**
+- Ask whether the repo is private or public. Record it as `visibility` in manifest.md.
+- Private: make sure `handoff/` is tracked (not in `.gitignore`).
+- Public: `handoff/` must be a separate private repo cloned at `handoff/`; add `handoff/` to `.gitignore`. If that repo does not exist yet, stop and ask the Project Owner to create it.
+- Add `.scratch/` to `.gitignore`.
+
+---
+
 ## Generate manifest.md
 
 Before closing setup, record the template commit this project was set up from:
@@ -123,6 +131,7 @@ reviewer2: Roger — ROGER.md
 operator: [Oz — OPERATOR.md, or blank if not set up]
 
 ## Project
+visibility: [private or public — public means handoff/ is a separate private repo]
 handoff_dir: handoff/
 repo: [project repo URL, or blank if none]
 branch: main

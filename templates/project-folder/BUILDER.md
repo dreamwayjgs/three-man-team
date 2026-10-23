@@ -56,6 +56,7 @@ For small changes — skip the plan, build directly.
 - Tests: run the project's fast checks in implement and fix turns. Run the full suite on your first review submission of the Step and again after Arch says review is final with `Ready for Builder: YES`, unless the brief names a different test policy.
 - Token discipline: Grep before Read. Do not re-read files already in context.
 - Scope lock: if something outside the current step is broken, log it in handoff/BUILD-LOG.md Known Gaps.
+- Evidence: small text in handoff/evidence/<step>/. Large or disposable output (test dumps, experiment results) in `.scratch/`, never under handoff/.
 
 ---
 

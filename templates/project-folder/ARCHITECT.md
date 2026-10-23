@@ -139,11 +139,12 @@ When review is final with `Ready for Builder: YES`:
 0. Compare the current test fingerprint (`git rev-parse HEAD` plus `git diff HEAD -- . ':(exclude)handoff' | git hash-object --stdin`) with the one Bob recorded for his final green full-suite run. If they match, record the fingerprint in handoff/BUILD-LOG.md and do not rerun. If code changed after that run, rerun the tests once.
 1. Tell Project Owner what was built, what Richard and Roger found, any Dissent and how you ruled, how it was resolved.
 2. Get explicit go-ahead.
-3. Commit to version control with a clear message.
-4. Push to production.
-5. Confirm the deploy landed.
-6. Update handoff/BUILD-LOG.md — step complete, deploy confirmed, date.
-7. Update handoff/SESSION-CHECKPOINT.md, then recommend that the Project Owner start a fresh Arch session for the next Step.
+3. Commit to version control with a clear message, handoff and evidence included.
+4. Tidy handoff (see Handoff Lifecycle) in a separate commit, so removed evidence stays in history. Record each decision in handoff/BUILD-LOG.md.
+5. Push to production.
+6. Confirm the deploy landed.
+7. Update handoff/BUILD-LOG.md — step complete, deploy confirmed, date.
+8. Update handoff/SESSION-CHECKPOINT.md, then recommend that the Project Owner start a fresh Arch session for the next Step.
 
 Nothing goes to production without steps 1 and 2.
 
@@ -158,6 +159,21 @@ Nothing goes to production without steps 1 and 2.
 - Consolidate approval, pause and resume instructions into the latest effective state. Remove superseded instructions from the checkpoint; preserve their history in BUILD-LOG. When an approved loop resumes, remove obsolete requests to confirm routine continuation. Keep still-applicable safety, scope and deployment gates.
 - Keep only facts needed to resume. Link to BUILD-LOG, briefs, reviews and evidence reports instead of copying historical narratives or measurement details.
 - Before saving, check that status, approval, budget and next action agree. If an unresolved contradiction blocks progress, state the exact owner decision needed rather than leaving competing instructions.
+
+---
+
+## Handoff Lifecycle
+
+`handoff/` is tracked and committed at the deploy gate, so git history is its archive. Never keep archive copies (`*.archive.md`, `archive/`, `.bak`).
+
+- Parallel workstreams may use `ARCHITECT-BRIEF-<name>.md`. Delete it once that work is deployed.
+- Step evidence (measurements, probe summaries, reports) goes in `handoff/evidence/<step>/` as small text. Large or disposable output goes in `.scratch/` (git-ignored, kept 30 days); evidence links to it. No data under `handoff/`.
+- Deploy gate tidy, per Step, after the Step commit:
+  - each file in `handoff/evidence/<step>/`: move to `docs/` only if it is publishable documentation for this repo, otherwise delete;
+  - each Known Gap that outlives the Step: file it in the repo's issue tracker (gh/glab), or `local-issues/NNN-slug.md` at the root when there is none; close a local issue by deleting its file in a commit;
+  - delete deployed per-workstream briefs.
+- `manifest.md` `visibility: public`: `handoff/` is a separate private repo cloned at `handoff/` and git-ignored by this repo. Commit it at the deploy gate too, naming the code commit. Internal issues go to that repo, not the public tracker.
+- Before a private repo goes public, the Project Owner removes `handoff/` and `local-issues/` from the published history. Do not change visibility yourself.
 
 ---
 
