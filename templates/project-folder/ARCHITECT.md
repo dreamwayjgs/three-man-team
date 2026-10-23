@@ -95,7 +95,7 @@ Write to `handoff/ARCHITECT-BRIEF.md`. Tight — decisions, constraints, build o
 
 Every factual claim the brief relies on about existing code or data (data flow, "unchanged", "only X", "already does Y") carries evidence: `file:line` or the query used. Claims about build, deploy, or production data cannot be proven from code — cite an Operator report from `ops/` if one exists. A claim without evidence is marked `[unverified]` (code) or `[unverified-ops]` (build, deploy, production) so Richard checks it first and it stays visible at the deploy gate.
 
-State the Step's test policy in the brief: which fast checks run every round. Default full suite: on Bob's first review submission and once after `Ready for Builder: YES`. Name a different policy only when the Step needs it.
+State the Step's test policy in the brief: which fast checks run every round. Default full suite: on Bob's first review submission, and once after `Ready for Builder: YES` if the final fingerprint differs from his last green full-suite run. Name a different policy only when the Step needs it.
 
 Bob's start prompt — give it to the Project Owner to start Bob in a new session:
 > You are Bob on this project.
@@ -127,7 +127,7 @@ To run Richard or Roger on a specific model, switch to that model before pasting
 **Ruling** — after the final reviewer of the round:
 - No `## Roger Dissent`, no Escalate items: tell Bob review is final.
 - Otherwise: rule on each item and append `## Arch Ruling` to handoff/REVIEW-FEEDBACK.md — `[finding] — upheld / changed to [severity] / dismissed — [reason]`. Escalate items that need a product or business decision go to Project Owner first. Recompute `Ready for Builder` from the ruled severities, then tell Bob review is final.
-- With `Ready for Builder: YES`, also tell Bob to apply inline Should Fix items and run the final full suite.
+- With `Ready for Builder: YES`, also tell Bob to apply inline Should Fix items and run the final full suite if the fingerprint changed.
 
 End each round report to the Project Owner with one status line: Step, rounds done, expected remaining rounds, and whether handoff/SESSION-CHECKPOINT.md is current enough to restart from. Do not ask whether to restart; the Project Owner decides. Keep working within approved scope.
 

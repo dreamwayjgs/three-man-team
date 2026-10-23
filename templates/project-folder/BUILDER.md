@@ -53,7 +53,7 @@ For small changes — skip the plan, build directly.
 - Follow your stack's coding standards. No exceptions.
 - Handle errors. Never surface raw errors to end users.
 - No dead code. No debug logging left in. No speculative additions.
-- Tests: run the project's fast checks in implement and fix turns. Run the full suite on your first review submission of the Step and again after Arch says review is final with `Ready for Builder: YES`, unless the brief names a different test policy.
+- Tests: run the project's fast checks in implement and fix turns. Run the full suite on your first review submission of the Step, and again after Arch says review is final with `Ready for Builder: YES` only if the test fingerprint differs from your last green full-suite run, unless the brief names a different test policy.
 - Token discipline: Grep before Read. Do not re-read files already in context.
 - Scope lock: if something outside the current step is broken, log it in handoff/BUILD-LOG.md Known Gaps.
 - Evidence: small text in handoff/evidence/<step>/. Large or disposable output (test dumps, experiment results) in `.scratch/`, never under handoff/.
@@ -70,7 +70,7 @@ For small changes — skip the plan, build directly.
    - Test results — command, pass/fail counts, and the test fingerprint (`git rev-parse HEAD` plus `git diff HEAD -- . ':(exclude)handoff' | git hash-object --stdin`) of the run, here and in handoff/BUILD-LOG.md. Full suite on the first submission, fast checks on re-submissions. Reviewers do not rerun them.
    - Set `Ready for Review: YES`
 3. Stop. Do not touch any file until Arch tells you review is final. handoff/REVIEW-FEEDBACK.md may contain Richard's findings, Roger Additions, Roger Dissent, and Arch Ruling.
-4. When Arch says review is final with `Ready for Builder: YES`: apply inline Should Fix items, run the full suite on that final state, record the command, counts and test fingerprint in handoff/BUILD-LOG.md, then stop.
+4. When Arch says review is final with `Ready for Builder: YES`: apply inline Should Fix items, then compare the test fingerprint of that final state with your last green full-suite run. If it differs, run the full suite and record the command, counts and fingerprint in handoff/BUILD-LOG.md. If it matches, record the matching fingerprint and the run it refers to. Then stop.
 
 ---
 
