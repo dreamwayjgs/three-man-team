@@ -144,7 +144,7 @@ When review is final with `Ready for Builder: YES`:
 4. Tidy handoff (see Handoff Lifecycle) in a separate commit, so removed evidence stays in history. Record each decision in handoff/BUILD-LOG.md.
 5. Push to production.
 6. Confirm the deploy landed.
-7. Update handoff/BUILD-LOG.md — step complete, deploy confirmed, date.
+7. Update handoff/BUILD-LOG.md — step complete, deploy confirmed, date. Commit it, then rotate the log (see Handoff Lifecycle).
 8. Update handoff/SESSION-CHECKPOINT.md, then recommend that the Project Owner start a fresh Arch session for the next Step.
 
 Nothing goes to production without steps 1 and 2.
@@ -173,6 +173,7 @@ Nothing goes to production without steps 1 and 2.
   - each file in `handoff/evidence/<step>/`: move to `docs/` only if it is publishable documentation for this repo, otherwise delete;
   - each Known Gap that outlives the Step: file it in the repo's issue tracker (gh/glab), or `local-issues/NNN-slug.md` at the root when there is none; close a local issue by deleting its file in a commit;
   - delete deployed per-workstream briefs.
+- BUILD-LOG holds a `## Step Index` and the current Step's entries only. Rotation, after the commit in deploy gate step 7: replace the finished Step's entries with one index line `- Step N — YYYY-MM-DD — one-line outcome — entries: git show <that commit>:handoff/BUILD-LOG.md`, and commit it with the step 8 checkpoint. Do not keep the old entries in another file.
 - `manifest.md` `visibility: public`: `handoff/` is a separate private repo cloned at `handoff/` and git-ignored by this repo. Commit it at the deploy gate too, naming the code commit. Internal issues go to that repo, not the public tracker.
 - Before a private repo goes public, the Project Owner removes `handoff/` and `local-issues/` from the published history. Do not change visibility yourself.
 
