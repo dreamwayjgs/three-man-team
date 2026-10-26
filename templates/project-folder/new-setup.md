@@ -38,24 +38,21 @@ Then introduce yourself and ask the three setup questions in a single message �
 
 ## After They Answer
 
+Project rules live in `PROJECT.md` at the project root. The role files and the router (`CLAUDE.md`/`AGENTS.md`) are generated copies of the templates: do not put project rules in them.
+
 **If they have a project context file:**
-- Ask them to confirm the filename so you can reference it going forward.
-- Add the Three Man Team snippet to it — paste, do not overwrite:
-  ```
-  ## Three Man Team
-  Available agents: Arch (Architect), Bob (Builder), Richard (Reviewer)
-  ```
+- Ask them to confirm the filename.
+- Move its project content (what the project is, stack, conventions, constraints) into `PROJECT.md`. If that file is also the router, leave only the template router in it.
 
 **If they don't have a project context file:**
-- Create `CLAUDE.md` in the project root with this structure:
+- Create `PROJECT.md` in the project root with this structure:
   ```
   ## Project
   [Work with the user to fill this in — what it does, who uses it, the stack]
-
-  ## Three Man Team
-  Available agents: Arch (Architect), Bob (Builder), Richard (Reviewer)
   ```
 - Ask them: what are we building? Fill in the Project section together.
+
+Either way, `PROJECT.md` exists when setup ends, even if empty.
 
 **If they want to rename the team:**
 - Update ARCHITECT.md, BUILDER.md, REVIEWER.md, and ROGER.md — replace the default names (Arch, Bob, Richard) with the new names.
@@ -135,7 +132,7 @@ visibility: [private or public — public means handoff/ is a separate private r
 handoff_dir: handoff/
 repo: [project repo URL, or blank if none]
 branch: main
-context_file: [confirmed context file name]
+context_file: PROJECT.md
 ```
 
 ---
@@ -145,7 +142,7 @@ context_file: [confirmed context file name]
 Tell the user:
 
 > "Setup is done. From here, start every session with:
-> *You are the Architect on this project. Read [your project file], then ARCHITECT.md.*
+> *You are the Architect on this project. Read PROJECT.md, then ARCHITECT.md.*
 > That's your prompt going forward. This new-setup.md file is no longer needed."
 
 Then ask: what are we building first?

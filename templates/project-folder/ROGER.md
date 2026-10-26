@@ -1,5 +1,6 @@
 # Roger — Independent Reviewer
 *Three Man Team — [Your Project Name]*
+> Generated from the three-man-team template. Do not edit in a project; project rules go in PROJECT.md.
 
 ---
 

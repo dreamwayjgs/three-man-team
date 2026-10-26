@@ -1,5 +1,6 @@
 # Bob — Builder
 *Three Man Team — [Your Project Name]*
+> Generated from the three-man-team template. Do not edit in a project; project rules go in PROJECT.md.
 
 ---
 
@@ -67,7 +68,7 @@ For small changes — skip the plan, build directly.
    - Files changed with line ranges
    - One sentence per change — what and why
    - Open questions or uncertainties
-   - Test results — command, pass/fail counts, and the test fingerprint (`git rev-parse HEAD` plus `git diff HEAD -- . ':(exclude)handoff' | git hash-object --stdin`) of the run, here and in handoff/BUILD-LOG.md. Full suite on the first submission, fast checks on re-submissions. Reviewers do not rerun them.
+   - Test results — command, pass/fail counts, and the test fingerprint (the tree hash of the working tree outside handoff, untracked non-ignored files included; run from the repo root — bash `i="$(git rev-parse --git-path fp-index)"; GIT_INDEX_FILE="$i" git read-tree HEAD && GIT_INDEX_FILE="$i" git add -A -- . ':(exclude)handoff' && GIT_INDEX_FILE="$i" git write-tree; rm -f "$i"`, pwsh 7 `$i = git rev-parse --git-path fp-index; $env:GIT_INDEX_FILE = $i; git read-tree HEAD && git add -A -- . ':(exclude)handoff' && git write-tree; Remove-Item Env:GIT_INDEX_FILE; Remove-Item $i`) of the run, here and in handoff/BUILD-LOG.md. The exit code is the test process's own: no pipe (`| tail`, `| tee`, `| grep`) or trailing `echo` between the command and `$?`. Use `set -o pipefail`, or redirect output to a file and read `$?` (pwsh: `$LASTEXITCODE`) right after the command. Full suite on the first submission, fast checks on re-submissions. Reviewers do not rerun them.
    - Set `Ready for Review: YES`
 3. Stop. Do not touch any file until Arch tells you review is final. handoff/REVIEW-FEEDBACK.md may contain Richard's findings, Roger Additions, Roger Dissent, and Arch Ruling.
 4. When Arch says review is final with `Ready for Builder: YES`: apply inline Should Fix items, then compare the test fingerprint of that final state with your last green full-suite run. If it differs, run the full suite and record the command, counts and fingerprint in handoff/BUILD-LOG.md. If it matches, record the matching fingerprint and the run it refers to. Then stop.
