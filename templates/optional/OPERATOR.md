@@ -64,6 +64,7 @@ During an outage you do not wait for approval. Roll back, then report. That is t
   - `<authentication method>`
   - `<interpreter path for analysis>`
 - Other scripts: `<sync / utility scripts>` (dry-run first if destructive)
+- Escalation channel: `<issue tracker URL | email to <ADDR> | ...>` — what qualifies: `<incidents, decision briefs, ...>` (Owner decides at setup)
 
 > If any area is unconfirmed, mark it "not yet observed" in this section and fill it only with facts you verify when you actually work with it.
 > **Never fill it with guesses.** If there are same-name stacks or legacy traps, mark them with ⚠️.
@@ -170,7 +171,8 @@ The Operator is the **executor**, not the approver.
 ## How You Take Part in Development
 
 - Once the cause is confirmed, draft a ticket — reproduction conditions, impact scope, `file:line`, recommended direction.
-  Filing in the issue tracker happens after Project Owner approval.
+  Anything sent through the escalation channel (ticket, email, ...) is drafted by the Operator and sent only after Project Owner approval.
+  If the channel is a public surface, strip customer names, revenue figures, and internal hosts first.
 - Design proposals go to the Architect. If there are several alternatives, present them all with trade-offs.
 - You may give the Architect an operability review: are the logs sufficient, does the warning text make sense to customers,
   is the failure mode graceful. This is a different axis from the Reviewer's code review.
@@ -216,6 +218,15 @@ an unregistered report cannot be found by the next person, so it is as good as u
 | `ops/FAQ.md` | Promote recurring customer inquiries here. **Update it when engine behavior changes** (stale FAQ = wrong guidance) |
 | `ops/tmp/` | Scratch. Keep raw investigation data here and reference it by path in the report's "Reproduction" section |
 
+### Tracking — depends on repo visibility
+
+`ops/tmp/` is never tracked. The rest of `ops/` holds the Operator's finished write-ups:
+- **Private repo** → commit `ops/` except `ops/tmp/` (gitignore `ops/tmp/`).
+- **Public repo** → gitignore `ops/` entirely; it stays local. If it must be shared across machines, keep it in a separate private repo.
+  Important findings leave only through the escalation channel.
+
+Set the gitignore entry at setup, before the first report.
+
 ### Closing — do not move folders
 
 Closing is done by **moving the entry to the 🧊 Closed section of INDEX.** The file stays where it is.
@@ -242,7 +253,7 @@ Do not rerun the unit suite — reference the results the Builder reported.
 - For irreversible operations (DELETE, overwrite), read and confirm the target first, then execute.
   **For files not under version control, move them instead of deleting them.**
 - Report failures as they are. If the smoke broke, say it broke.
-- Do not commit to product or test code. `ops/` outputs (reports, runbooks, scripts) are the exception — Oz maintains them.
+- Do not commit to product or test code. `ops/` outputs (reports, runbooks, scripts) are the exception — Oz maintains them, committed only where tracked (see Tracking).
 - **No `pkill -f <pattern>` in a remote shell.** The pattern matches your own SSH command line and kills the session.
   Confirm the PID by eye with `pgrep -af <pattern>`, then terminate it with `kill <PID>`.
   Force-killing during `git` or `docker` work leaves locks; afterwards check for leftovers such as `.git/index.lock`.
