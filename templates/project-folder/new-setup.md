@@ -97,11 +97,10 @@ If they don't want RTK — keep going. They can install it any time.
 
 ---
 
-**Repo visibility and ignores:**
-- Ask whether the repo is private or public. Record it as `visibility` in manifest.md.
-- Private: make sure `handoff/` is tracked (not in `.gitignore`).
-- Public: `handoff/` must be a separate private repo cloned at `handoff/`; add `handoff/` to `.gitignore`. If that repo does not exist yet, stop and ask the Project Owner to create it.
-- Add `.scratch/` to `.gitignore`.
+**Repo layout, visibility and ignores:**
+- Ask whether this project uses the umbrella layout: the role files, router, PROJECT.md, this manifest and `handoff/` live in a separate private umbrella repo (this root), and the code repo is a git-ignored independent clone inside it. If yes, record `layout: umbrella`, the umbrella repo remote as `umbrella`, and the code repo remote with its subdir and branch as `repo`. Role sessions always open at the umbrella root; "repo root" in the role files means the code repo. The umbrella `.gitignore` lists the code repo directory, `.scratch/` and `.tmt/`; the code repo's own `.gitignore` is not touched.
+- Ask whether the code repo is private or public. Record it as `visibility` in manifest.md (the code repo's visibility; the umbrella is always private).
+- Single repo without umbrella: only for a private repo. Make sure `handoff/` is tracked (not in `.gitignore`) and add `.scratch/` to `.gitignore`. A public repo without an umbrella is not supported: stop and ask the Project Owner to set up the umbrella layout first.
 
 ---
 
@@ -128,9 +127,11 @@ reviewer2: Roger — ROGER.md
 operator: [Oz — OPERATOR.md, or blank if not set up]
 
 ## Project
-visibility: [private or public — public means handoff/ is a separate private repo]
+visibility: [private or public — the code repo's]
+layout: [umbrella or single]
+umbrella: [umbrella repo URL (subdir of the code repo clone noted in repo:), or blank if single]
 handoff_dir: handoff/
-repo: [project repo URL, or blank if none]
+repo: [code repo URL (subdir <dir>/, branch main), or blank if none]
 branch: main
 context_file: PROJECT.md
 ```
