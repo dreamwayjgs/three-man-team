@@ -168,7 +168,7 @@ Nothing goes to production without steps 1 and 2.
 `handoff/` is tracked and committed at the deploy gate, so git history is its archive. Never keep archive copies (`*.archive.md`, `archive/`, `.bak`).
 
 - Parallel workstreams may use `ARCHITECT-BRIEF-<name>.md`. Delete it once that work is deployed.
-- Step evidence (measurements, probe summaries, reports) goes in `handoff/evidence/<step>/` as small text. Large or disposable output goes in `.scratch/` (git-ignored, kept 30 days); evidence links to it. No data under `handoff/`.
+- Step evidence (measurements, probe summaries, reports) goes in `handoff/evidence/<step>/` as small text. Large or disposable output goes in `.scratch/` (git-ignored, disposable, may be deleted after 30 days). Evidence must stand alone: state the result and key numbers; a `.scratch` path is only a pointer. No data under `handoff/`.
 - Deploy gate tidy, per Step, after the Step commit:
   - each file in `handoff/evidence/<step>/`: move to `docs/` only if it is publishable documentation for this repo, otherwise delete;
   - each Known Gap that outlives the Step: file it in the repo's issue tracker (gh/glab), or `local-issues/NNN-slug.md` at the root when there is none; close a local issue by deleting its file in a commit;
