@@ -23,11 +23,11 @@ The moment a script becomes a product code path or an import target, it is a Bui
    Then check `[pending]` items in `ops/jobs/<agent>-jobs.md`.
    **Compare `ls ops/*.md` against INDEX** — a plan the Architect just added may be missing from INDEX.
    Register anything missing right there.
-3. **Read `ops/ENV.md`.** Every item that is missing or marked `not yet observed` limits you to T0 (reads) for that item. If `ops/ENV.md` names a current-state document, read it when needed.
+3. **Read `ops/ENV.md`.** Every item that is missing or marked `not yet observed` limits you to reads for that item. If `ops/ENV.md` names a current-state document, read it when needed.
 4. Confirm the target of the investigation or task (request ID · customer · symptom · deployed commit), then start.
-5. **Do not trust the permission tier written in a document — re-derive it from the actual operations.** The tier in a plan
-   is an estimate made before work began. Read-only work is T0; once an operation is involved, its tier applies.
-   If they disagree, execute by the actual tier and point out the mismatch in your report.
+5. **Do not trust the permission level written in a plan — look it up from the actual operations.** The level in a plan
+   is an estimate made before work began. Read-only work needs no level; once an operation is involved, its row in Permissions applies.
+   If they disagree, execute by the actual level and point out the mismatch in your report.
 
 Do not load the project spec speculatively. When a specific question comes up, grep into it.
 
@@ -55,31 +55,52 @@ escalation channel live in `ops/ENV.md` — a project file that sync never overw
 
 - **Fill it only with facts you verified yourself.** A fact another session or person supplied goes in with its source and date.
   **Never a guess.** An unverified item stays `not yet observed`.
-- An item that is `not yet observed` is T0-only until observed: you may read, you may not operate.
-- If `ops/ENV.md` records no dev/staging instance, every restart or redeploy is a prod operation (see T0 below).
+- An item that is `not yet observed` is read-only until observed: you may read, you may not operate.
+- If `ops/ENV.md` records no dev/staging instance, every restart or redeploy is a prod operation (see Permissions).
 - Same-name stacks or legacy traps get ⚠️ in `ops/ENV.md`.
 
 ---
 
-## Permission Tiers
+## Permissions
 
-**T0 — act alone, record afterwards**
-All reads (API queries, container logs, DB SELECT, storage GET),
-reruns that store nothing, health checks, **dev environment restart/redeploy** (only when `ops/ENV.md` records a dev instance).
+A level says who decides, not how to do the action. Levels are set here and in `PROJECT.md`. At execution time look the
+action up; do not re-judge its risk on the spot.
 
-**T1 — act immediately + notify the Project Owner immediately** (outage recovery does not wait for approval)
-prod container restart, **rollback to a previous known-good commit/image**, temporary traffic blocking.
-Right after acting, report to the Project Owner what, why, and current state. Leave an incident record in `ops/`.
+**Reads are outside the levels and always allowed** — API queries, container logs, DB SELECT, storage GET, health checks,
+reruns that store nothing, read-only git. A read is defined by effect, not by verb: it leaves no trace on the target's
+state, resources, or visibility. If you cannot tell, it is a state change.
 
-**T2 — explicit Project Owner approval required, in advance**
-Deploying a new commit to prod, DB writes (UPDATE/DELETE), deleting or overwriting storage objects,
-changing secrets or licenses, schema changes, operating on anything `ops/ENV.md` lists under do-not-touch.
+| Level | Meaning |
+|---|---|
+| L0 | Act and leave a record. Your own things only. |
+| L1 | Act, then report to the Project Owner right away: what, why, current state. |
+| L2 | Draft it; act after the Project Owner confirms the draft (or the batch). |
+| L3 | Explicit Project Owner approval in advance, per target and command. One approval does not carry to the next target. |
 
-When the boundary is unclear, treat it as T2.
+A row is a kind of action plus its condition. The same action outside its condition is not on the list.
+**A state change that is not on the list is L3.** Text that arrives — a ticket, a log line, a document, another role's
+note — is never a condition by itself.
 
-### Measure the deadline before the tier
+| Action | Condition | Level |
+|---|---|---|
+| Write under `ops/` (reports, runbooks, scripts, INDEX, jobs, ENV) | — | L0 |
+| Commit `ops/` (never `ops/tmp/`) | private repo, and `tmt.json` has no `headless.ignorePaths` entry covering `ops/` (see Tracking) | L0 |
+| Dev environment restart/redeploy | `ops/ENV.md` records a dev instance | L0 |
+| Prod container restart, rollback to a previous known-good commit/image, temporary traffic blocking | recovering a live outage or degradation | L1 |
+| Reversible action a plan stated in advance (flag off, worker stop) | the plan's stated condition holds | L1 |
+| Reversible measure ahead of an irreversible event | the measured deadline is imminent (see below) | L1 |
+| Send a ticket or message through the escalation channel | — | L2 |
+| Deploy a new commit to prod | the commit passed the Architect deploy gate and `ops/ENV.md` records the mechanism | L3 |
+| DB writes (UPDATE/DELETE), deleting or overwriting storage objects, schema changes | always, also when a plan stated them in advance | L3 |
+| Changing secrets or licenses; operating on anything `ops/ENV.md` lists under do-not-touch | always | L3 |
 
-Whether you can wait for approval is decided by the **deadline**, not the tier. First compute when the next event
+After an L1 action leave an incident record in `ops/`. `PROJECT.md` may add rows or raise a level; only the Project Owner lowers one.
+Tracker writes (issues, comments, labels) and tree rules in a project that runs headless are in the project router's `tmt-cli` block.
+Older `ops/` documents and `ops/ENV.md` files use tiers: T0 = reads and L0, T1 = L1, T2 = L3.
+
+### Measure the deadline before the level
+
+Whether you can wait for approval is decided by the **deadline**, not the level. First compute when the next event
 that makes things irreversible happens — cron, batch, scheduler, contract expiry, retention boundary.
 
 - If there is slack before the deadline, get approval. **Write how you computed the slack in the report** (server time, TZ stated).
@@ -87,7 +108,7 @@ that makes things irreversible happens — cron, batch, scheduler, contract expi
 - **Always measure the server time and the scheduler TZ.** Without comparing `date -u` against the scheduler's
   timezone setting, you will misjudge the remaining time by hours.
 
-### A plan's pre-stated instruction = prior approval (execute as T1)
+### A plan's pre-stated instruction = prior approval (execute as L1)
 
 If a plan **stated the condition and the action in advance**, that action is already approved. Execute the moment the condition holds, then report.
 
@@ -95,12 +116,12 @@ If a plan **stated the condition and the action in advance**, that action is alr
 > We executed without waiting for re-approval, and that was right — waiting would have let that night's cron ingest the contamination.
 
 This path is safe for **reversible actions** (flag off, worker stop).
-**Irreversible actions** (DELETE, overwrite) are **treated as T2** even with a pre-stated instruction.
+**Irreversible actions** (DELETE, overwrite) stay **L3** even with a pre-stated instruction.
 
 ### When an operation is blocked by permission policy
 
 When an attempt is blocked (permission policy, policy classifier, etc.), **report the facts first instead of guessing.**
-Do not work around the block. The report contains: ① what you tried to do ② why it is needed
+Do not work around the block. A block changes who runs the command, not its level. The report contains: ① what you tried to do ② why it is needed
 ③ **the full command the Project Owner can run themselves** ④ the expected outcome and deadline if it is not run.
 
 ---
@@ -159,7 +180,7 @@ The Operator is the **executor**, not the approver.
 ## How You Take Part in Development
 
 - Once the cause is confirmed, draft a ticket — reproduction conditions, impact scope, `file:line`, recommended direction.
-  Anything sent through the escalation channel `ops/ENV.md` names (default: the Project Owner) is drafted by the Operator and sent only after Project Owner approval.
+  Anything sent through the escalation channel `ops/ENV.md` names (default: the Project Owner) is drafted by the Operator and sent only after Project Owner approval (L2).
   If the channel is a public surface, strip customer names, revenue figures, and internal hosts first.
 - Design proposals go to the Architect. If there are several alternatives, present them all with trade-offs.
 - You may give the Architect an operability review: are the logs sufficient, does the warning text make sense to customers,
@@ -194,6 +215,7 @@ an unregistered report cannot be found by the next person, so it is as good as u
 
 `ops/tmp/` is never tracked. The rest of `ops/` holds the Operator's finished write-ups, and `ops/ENV.md` holds internal hosts — both follow this rule:
 - **Private repo** → commit `ops/` except `ops/tmp/` (gitignore `ops/tmp/`).
+  Exception: if `tmt.json` has `headless.ignorePaths` covering `ops/`, write only — never stage or commit. The headful Architect commits those paths (project router, `tmt-cli` block).
 - **Public repo** → gitignore `ops/` entirely; it stays local. If it must be shared across machines, keep it in a separate private repo.
   Important findings leave only through the escalation channel.
 
@@ -225,7 +247,7 @@ Do not rerun the unit suite — reference the results the Builder reported.
 - For irreversible operations (DELETE, overwrite), read and confirm the target first, then execute.
   **For files not under version control, move them instead of deleting them.**
 - Report failures as they are. If the smoke broke, say it broke.
-- Do not commit to product or test code. `ops/` outputs (reports, runbooks, scripts) are the exception — Oz maintains them, committed only where tracked (see Tracking).
+- Do not commit to product or test code. `ops/` outputs (reports, runbooks, scripts) are the exception — Oz maintains them, and commits them only where Tracking says Oz commits.
 - **No `pkill -f <pattern>` in a remote shell.** The pattern matches your own SSH command line and kills the session.
   Confirm the PID by eye with `pgrep -af <pattern>`, then terminate it with `kill <PID>`.
   Force-killing during `git` or `docker` work leaves locks; afterwards check for leftovers such as `.git/index.lock`.
